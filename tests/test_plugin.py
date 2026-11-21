@@ -200,24 +200,11 @@ def test_READMEの章が規則の順に並んでいる():
     assert chapters == ["機能", "導入方法", "使い方", "困ったとき", "ライセンス"]
 
 
-def test_READMEのオフライン手順が固定の3手順である():
-    readme = read(ROOT / "README.md")
-    section = re.split(r"^### ", readme.split("### オフラインで入れる")[1], flags=re.M)[
-        0
-    ]
-    steps = re.findall(r"^\d+\. (.+)$", section, re.MULTILINE)
-    assert steps == [
-        "ネットワークのある環境で取得したリポジトリを、媒体で持ち込む。",
-        "`/plugin marketplace add <持ち込んだリポジトリのパス>` を実行する。",
-        "`/plugin install html-report@html-report` を実行する。",
-    ]
-
-
-def test_READMEの前提にネットワークとPythonの版がある():
+def test_READMEの前提にPythonとNodeの版がある():
     readme = read(ROOT / "README.md")
     prerequisites = re.split(r"^### ", readme.split("## 導入方法")[1], flags=re.M)[0]
-    assert "ネットワーク接続" in prerequisites
     assert "Python 3" in prerequisites
+    assert "Node.js 20 以上" in prerequisites
 
 
 def test_marketplaceのdescriptionは最上位にある():
@@ -411,9 +398,10 @@ def test_createの手順の本文が字下げされている():
             assert not line.strip() or line.startswith("   "), (name, line[:30])
 
 
-def test_READMEの使い方で選択のあとに完了報告が出る():
+def test_READMEの使い方で選択のあとに後始末と報告が出る():
     readme = read(ROOT / "README.md")
-    assert readme.index("案の名前から 1 つ選ぶ") < readme.index("完了報告が出る")
+    usage = readme.split("## 使い方")[1]
+    assert usage.index("| 選択と照合 |") < usage.index("| 後始末と報告 |")
 
 
 def test_createの細部の規則():
@@ -427,11 +415,11 @@ def test_createの細部の規則():
     )
 
 
-def test_READMEの削除の前に警告があり_検証の図が分担を示す():
+def test_READMEの削除の前に警告があり_流れの図が戻りを示す():
     readme = read(ROOT / "README.md")
     assert "元に戻せない" in readme
-    alt = re.search(r'<img src="docs/images/verify.svg" alt="([^"]+)"', readme).group(1)
-    desc = read(ROOT / "docs" / "images" / "verify.svg")
+    alt = re.search(r'<img src="docs/images/flow.svg" alt="([^"]+)"', readme).group(1)
+    desc = read(ROOT / "docs" / "images" / "flow.svg")
     for text in (alt, desc):
-        assert "全案" in text
-        assert "選んだ案" in text
+        assert "後始末と報告" in text
+        assert "案の生成に戻る" in text

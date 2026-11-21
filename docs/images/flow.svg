@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 370" width="800" role="img" aria-labelledby="t d" font-family="'Yu Gothic UI','Meiryo',system-ui,sans-serif">
+  <title id="t">create の流れ図</title>
+  <desc id="d">環境と素材、要件の確定、案の生成と保存、検証、選択と照合、後始末と報告の順に進む。選択で「その他」を選ぶと、案の生成に戻る。</desc>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#1d2321"/></marker>
+    <marker id="aw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#a4561a"/></marker>
+  </defs>
+  <rect width="800" height="370" fill="#ffffff"/>
+  <g fill="#ffffff" stroke="#c9d0cd" stroke-width="1.5">
+    <rect x="1" y="20" width="198" height="100"/>
+    <rect x="301" y="20" width="198" height="100"/>
+    <rect x="601" y="20" width="198" height="100"/>
+    <rect x="601" y="240" width="198" height="100"/>
+    <rect x="301" y="240" width="198" height="100"/>
+  </g>
+  <rect x="1" y="240" width="198" height="100" fill="#dcefe9" stroke="#1f6f5c" stroke-width="1.5"/>
+  <g font-size="12" fill="#1f6f5c" font-family="Consolas,monospace">
+    <text x="14" y="42">手順 1〜2</text><text x="314" y="42">手順 3</text><text x="614" y="42">手順 4〜6</text>
+    <text x="614" y="262">手順 7</text><text x="314" y="262">手順 8〜9</text><text x="14" y="262">手順 10〜11</text>
+  </g>
+  <g font-size="16" font-weight="700" fill="#1d2321">
+    <text x="14" y="68">環境と素材</text><text x="314" y="68">要件の確定</text><text x="614" y="68">案の生成と保存</text>
+    <text x="614" y="288">検証</text><text x="314" y="288">選択と照合</text><text x="14" y="288">後始末と報告</text>
+  </g>
+  <g font-size="12.5" fill="#5b6662">
+    <text x="14" y="92">OS・ツールを確認</text><text x="14" y="109">素材ファイルを読む</text>
+    <text x="314" y="92">分からない項目だけ質問</text><text x="314" y="109">要件のまとめを確認</text>
+    <text x="614" y="92">2〜3 案を同じ集計で作る</text><text x="614" y="109">案ごとにファイル保存</text>
+    <text x="614" y="312">崩れ・外部通信・DOM</text><text x="614" y="329">各最大 3 回まで修正</text>
+    <text x="314" y="312">案を 1 つ選ぶ</text><text x="314" y="329">要件と 6 点を照合</text>
+    <text x="14" y="312">他の案を削除・改名</text><text x="14" y="329">保存先と結果を報告</text>
+  </g>
+  <g stroke="#1d2321" stroke-width="1.6" fill="none">
+    <line x1="202" y1="70" x2="298" y2="70" marker-end="url(#ah)"/>
+    <line x1="502" y1="70" x2="598" y2="70" marker-end="url(#ah)"/>
+    <line x1="760" y1="122" x2="760" y2="238" marker-end="url(#ah)"/>
+    <line x1="598" y1="290" x2="502" y2="290" marker-end="url(#ah)"/>
+    <line x1="298" y1="290" x2="202" y2="290" marker-end="url(#ah)"/>
+  </g>
+  <g font-size="12" fill="#5b6662">
+    <text x="250" y="62" text-anchor="middle">素材</text>
+    <text x="550" y="62" text-anchor="middle">要件のまとめ</text>
+    <text x="750" y="184" text-anchor="end">案の HTML</text>
+    <text x="550" y="282" text-anchor="middle">検査済みの案</text>
+    <text x="250" y="282" text-anchor="middle">選んだ案</text>
+  </g>
+  <path d="M400 238 V190 H650 V122" fill="none" stroke="#a4561a" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#aw)"/>
+  <text x="410" y="182" font-size="12" fill="#a4561a">「その他」を選ぶと全案を作り直す</text>
+</svg>
