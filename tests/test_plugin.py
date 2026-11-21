@@ -112,8 +112,16 @@ def create_steps():
 
 def test_createが案を開くコマンドを誤らない():
     select = create_steps()["選択"]
-    assert 'start "" "<パス>"' in select
+    assert 'cd "<保存先のフォルダ>"' in select
+    assert 'start "" "<ファイル名>"' in select
+    assert 'start "" "<パス>"' not in select
     assert "`cmd /c` と PowerShell は使わない" in select
+
+
+def test_createがfilenameを渡させない():
+    verify = create_steps()["検証"]
+    assert "`filename` は渡さない" in verify
+    assert "自分が `filename` に渡したパス" not in verify
 
 
 def test_createが生成HTMLにCSPを入れさせる():
