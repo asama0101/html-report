@@ -112,8 +112,29 @@ def create_steps():
 
 def test_createが案を開くコマンドを誤らない():
     select = create_steps()["選択"]
-    assert 'start "" "<パス>"' in select
+    assert 'cd "<保存先のフォルダ>"' in select
+    assert 'start "" "<ファイル名>"' in select
+    assert 'start "" "<パス>"' not in select
     assert "`cmd /c` と PowerShell は使わない" in select
+
+
+def test_createが開く前にJSの危険な書き方を確かめさせる():
+    verify = create_steps()["検証"]
+    words = (
+        "innerHTML",
+        "insertAdjacentHTML",
+        "document.write",
+        "eval(",
+        "new Function",
+    )
+    for word in words:
+        assert f"`{word}`" in verify, word
+
+
+def test_createがfilenameを渡させない():
+    verify = create_steps()["検証"]
+    assert "`filename` は渡さない" in verify
+    assert "自分が `filename` に渡したパス" not in verify
 
 
 def test_createが生成HTMLにCSPを入れさせる():
@@ -272,7 +293,10 @@ def test_createの選択の規則():
     select = steps["選択"]
     assert "AskUserQuestion" in select
     assert "その他" in select
-    assert "作り直す前の案のファイルは、作り直した案を保存する前に削除する" in select
+    assert (
+        "作り直す前の案のファイルは、作り直した案を保存する前に、"
+        "手順 6 で自分が保存した案のパスを、1 つずつ指定して削除する"
+    ) in select
     assert "案のファイルをすべて残し" in select
     assert "削除するコマンド" in select
     assert "毎回行う" in select
@@ -398,7 +422,7 @@ def test_createの細部の規則():
     assert "案ごとの保存先の絶対パス" in steps["検証"]
     assert "本文・数値は変えずに直す" in steps["検証"]
     assert (
-        "選ばれた案だけに、手順 7 の崩れと外部リクエストの確認を行う"
+        "選ばれた案だけに、手順 7 の崩れ・外部リクエスト・DOM 検査の確認を行う"
         in steps["要件との照合"]
     )
 
