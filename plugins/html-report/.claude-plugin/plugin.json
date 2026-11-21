@@ -1,0 +1,9 @@
+{
+  "name": "html-report",
+  "version": "0.5.0",
+  "description": "希望した内容で、目的・読み手・必須の内容に沿った 1 ファイル完結の HTML レポートを生成する。Windows 専用。",
+  "author": { "name": "html-report contributors" },
+  "license": "MIT",
+  "repository": "https://github.com/asama0101/html-report",
+  "keywords": ["report", "html", "artifact-design"]
+}

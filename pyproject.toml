@@ -1,0 +1,19 @@
+[project]
+name = "html-report-tests"
+version = "0.5.0"
+requires-python = ">=3.12"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+xfail_strict = true
+addopts = ["--strict-markers", "-ra"]
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "N", "B", "UP", "SIM", "S", "PT", "PTH", "BLE"]
+extend-select = ["PLW1514"]  # open の encoding 省略（preview のルール）
+preview = true
+explicit-preview-rules = true  # コードを指定した preview のルールだけ有効にする
+
+[tool.ruff.lint.per-file-ignores]
+# N802 は、テスト名に日本語と英大文字（SKILL・MCP など）を使うため
+"tests/**" = ["S101", "S105", "S106", "S108", "S603", "S607", "N802"]

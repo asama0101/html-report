@@ -1,0 +1,12 @@
+{
+  "name": "html-report",
+  "owner": { "name": "html-report contributors" },
+  "description": "HTML レポートを作るプラグイン html-report の配布用マーケットプレイス。",
+  "plugins": [
+    {
+      "name": "html-report",
+      "source": "./plugins/html-report",
+      "description": "希望した内容で、目的・読み手・必須の内容に沿った 1 ファイル完結の HTML レポートを生成する"
+    }
+  ]
+}

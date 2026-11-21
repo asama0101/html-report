@@ -1,0 +1,11 @@
+html-report の出典とライセンス
+
+html-report 自体のライセンスは MIT（リポジトリ直下の LICENSE）。
+
+## 同梱している外部のコード・文書
+
+なし。
+
+## 実行時に使うスキル・MCP（同梱しない・再配布しない）
+
+- artifact-design スキル（必須）、dataviz スキル（任意）、artifact-diagramming スキル（任意）、Playwright MCP（必須）。Playwright MCP は利用者が別に入れる。スキルは、Claude Code のスキルの一覧にあるものを使う。

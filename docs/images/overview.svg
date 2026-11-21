@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-labelledby="t d">
+  <title id="t">html-report:create の全体の流れ</title>
+  <desc id="d">依頼文と素材ファイルを html-report:create に渡すと、質問、案ごとの生成と保存、全案の検証、案の選択の順に進む。デザインの異なる完成版が 2〜3 案できて、選んだ案の HTML レポートだけが残る。</desc>
+  <style>
+    text { font-family: "Yu Gothic UI", "Hiragino Sans", "Noto Sans JP", Meiryo, sans-serif; fill: #1b2430; }
+    .m { fill: #4a5565; }
+    .box { fill: #ffffff; stroke: #8a95a6; stroke-width: 1.5; }
+    .band { fill: #eaf1fc; stroke: #1f5fbf; stroke-width: 1.5; }
+    .out { fill: #e4f3ea; stroke: #1d7a4f; stroke-width: 1.5; }
+    .ln { stroke: #1f5fbf; stroke-width: 2; fill: none; }
+    .dash { stroke: #1d7a4f; stroke-width: 2; fill: none; stroke-dasharray: 6 4; }
+    .ah { fill: #1f5fbf; }
+    .ag { fill: #1d7a4f; }
+  </style>
+  <rect x="1" y="1" width="798" height="398" rx="8" fill="#ffffff" stroke="#d9dee6"/>
+
+  <rect class="box" x="130" y="16" width="230" height="52" rx="6"/>
+  <text x="245" y="38" text-anchor="middle" font-size="16" font-weight="700">依頼文</text>
+  <text x="245" y="58" text-anchor="middle" font-size="12" class="m">誰が読み、何のために使うか</text>
+  <rect class="box" x="440" y="16" width="230" height="52" rx="6"/>
+  <text x="555" y="38" text-anchor="middle" font-size="16" font-weight="700">素材ファイル</text>
+  <text x="555" y="58" text-anchor="middle" font-size="12" class="m">CSV・Markdown・テキスト・画像</text>
+
+  <path class="ln" d="M245 68 V100 M555 68 V100"/>
+  <polygon class="ah" points="239,98 245,110 251,98"/>
+  <polygon class="ah" points="549,98 555,110 561,98"/>
+  <text x="400" y="92" text-anchor="middle" font-size="13" class="m">依頼文と素材を渡す</text>
+
+  <rect class="band" x="20" y="112" width="760" height="146" rx="8"/>
+  <text x="400" y="136" text-anchor="middle" font-size="16" font-weight="700">/html-report:create</text>
+
+  <rect class="box" x="34" y="150" width="166" height="92" rx="6"/>
+  <text x="117" y="176" text-anchor="middle" font-size="15" font-weight="700">1 質問</text>
+  <text x="117" y="201" text-anchor="middle" font-size="13">足りない点だけ</text>
+  <text x="117" y="221" text-anchor="middle" font-size="13">聞かれる</text>
+  <rect class="box" x="224" y="150" width="166" height="92" rx="6"/>
+  <text x="307" y="176" text-anchor="middle" font-size="15" font-weight="700">2 生成・保存</text>
+  <text x="307" y="201" text-anchor="middle" font-size="13">2〜3 案の HTML を</text>
+  <text x="307" y="221" text-anchor="middle" font-size="13">作って保存する</text>
+  <rect class="box" x="414" y="150" width="166" height="92" rx="6"/>
+  <text x="497" y="176" text-anchor="middle" font-size="15" font-weight="700">3 全案を検証</text>
+  <text x="497" y="201" text-anchor="middle" font-size="13">ブラウザで開いて</text>
+  <text x="497" y="221" text-anchor="middle" font-size="13">崩れなどを確かめる</text>
+  <rect class="box" x="604" y="150" width="166" height="92" rx="6"/>
+  <text x="687" y="176" text-anchor="middle" font-size="15" font-weight="700">4 選択</text>
+  <text x="687" y="201" text-anchor="middle" font-size="13">完成版から</text>
+  <text x="687" y="221" text-anchor="middle" font-size="13">1 つ選ぶ</text>
+
+  <path class="ln" d="M200 196 H216 M390 196 H406 M580 196 H596"/>
+  <polygon class="ah" points="214,190 224,196 214,202"/>
+  <polygon class="ah" points="404,190 414,196 404,202"/>
+  <polygon class="ah" points="594,190 604,196 594,202"/>
+
+  <path class="ln" d="M307 258 V296"/>
+  <polygon class="ah" points="301,292 307,304 313,292"/>
+  <text x="319" y="284" font-size="13" class="m">保存</text>
+
+  <rect class="out" x="130" y="306" width="330" height="58" rx="6"/>
+  <text x="295" y="330" text-anchor="middle" font-size="15" font-weight="700">YYYY-MM-DD-題名-案名.html</text>
+  <text x="295" y="352" text-anchor="middle" font-size="13">案ごとの完成版（2〜3 個）</text>
+
+  <path class="dash" d="M460 335 H536"/>
+  <polygon class="ag" points="534,329 546,335 534,341"/>
+  <text x="498" y="324" text-anchor="middle" font-size="12" class="m">案を選ぶ</text>
+
+  <rect class="out" x="556" y="306" width="224" height="58" rx="6"/>
+  <text x="668" y="330" text-anchor="middle" font-size="15" font-weight="700">YYYY-MM-DD-題名.html</text>
+  <text x="668" y="352" text-anchor="middle" font-size="13">選んだ案だけが残る</text>
+
+  <text x="400" y="388" text-anchor="middle" font-size="12" class="m">保存先は、実行したフォルダの直下。選ばれなかった案は削除される</text>
+</svg>

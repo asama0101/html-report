@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 340" role="img" aria-labelledby="t d">
+  <title id="t">全案の検証と、選んだ案の照合（主な 6 点）</title>
+  <desc id="d">保存した HTML を、幅 1280px、高さ 720px のブラウザで開き、主な 6 点を確かめる。全案には、崩れがないこと、外部へのリクエストがないことを確かめる。選んだ案には、必須の内容がすべて載っていること、結論が最初の画面にあること、分量が、指定の画面数または章の数に合うこと、章の並びが目的に沿っていることを確かめる。合わない点があれば、検証と照合のそれぞれで、最大 3 回まで直して確かめ直す。</desc>
+  <style>
+    text { font-family: "Yu Gothic UI", "Hiragino Sans", "Noto Sans JP", Meiryo, sans-serif; fill: #1b2430; }
+    .m { fill: #4a5565; }
+    .ck { fill: #e4f3ea; stroke: #1d7a4f; stroke-width: 1.5; }
+    .tick { stroke: #1d7a4f; stroke-width: 2.2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    .ln { stroke: #1f5fbf; stroke-width: 2; fill: none; }
+    .ah { fill: #1f5fbf; }
+  </style>
+  <rect x="1" y="1" width="798" height="338" rx="8" fill="#ffffff" stroke="#d9dee6"/>
+
+  <rect x="30" y="24" width="270" height="170" rx="6" fill="#ffffff" stroke="#1b2430" stroke-width="2.5"/>
+  <rect x="44" y="40" width="150" height="12" rx="2" fill="#1f5fbf"/>
+  <rect x="44" y="64" width="242" height="7" rx="2" fill="#d9dee6"/>
+  <rect x="44" y="80" width="76" height="46" rx="2" fill="#d9dee6"/>
+  <rect x="132" y="80" width="76" height="46" rx="2" fill="#d9dee6"/>
+  <rect x="220" y="80" width="66" height="46" rx="2" fill="#d9dee6"/>
+  <rect x="44" y="138" width="242" height="7" rx="2" fill="#d9dee6"/>
+  <rect x="44" y="154" width="170" height="7" rx="2" fill="#d9dee6"/>
+  <text x="165" y="220" text-anchor="middle" font-size="14" font-weight="700">保存した全案の HTML を、幅 1280px・</text>
+  <text x="165" y="240" text-anchor="middle" font-size="14" font-weight="700">高さ 720px のブラウザで開く</text>
+
+  <path class="ln" d="M304 109 H334"/>
+  <polygon class="ah" points="332,103 344,109 332,115"/>
+  <text x="306" y="96" font-size="12" class="m">確かめる</text>
+
+  <g font-size="15">
+    <circle class="ck" cx="364" cy="44" r="11"/><path class="tick" d="M358 44 l4 4 l8 -9"/>
+    <text x="388" y="50">全案: 崩れがない（はみ出し・重なり・文字化け）</text>
+    <circle class="ck" cx="364" cy="84" r="11"/><path class="tick" d="M358 84 l4 4 l8 -9"/>
+    <text x="388" y="90">全案: 外部へのリクエストがない</text>
+    <circle class="ck" cx="364" cy="124" r="11"/><path class="tick" d="M358 124 l4 4 l8 -9"/>
+    <text x="388" y="130">選んだ案: 必須の内容がすべて載っている</text>
+    <circle class="ck" cx="364" cy="164" r="11"/><path class="tick" d="M358 164 l4 4 l8 -9"/>
+    <text x="388" y="170">選んだ案: 結論が最初の画面にある</text>
+    <circle class="ck" cx="364" cy="204" r="11"/><path class="tick" d="M358 204 l4 4 l8 -9"/>
+    <text x="388" y="210">選んだ案: 分量が、指定の画面数または章の数に合う</text>
+    <circle class="ck" cx="364" cy="244" r="11"/><path class="tick" d="M358 244 l4 4 l8 -9"/>
+    <text x="388" y="250">選んだ案: 章の並びが目的に沿っている</text>
+  </g>
+
+  <text x="364" y="308" font-size="13" class="m">合わない点は直して確かめ直す（検証・照合それぞれ最大 3 回）</text>
+</svg>
