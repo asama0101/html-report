@@ -118,6 +118,19 @@ def test_createが案を開くコマンドを誤らない():
     assert "`cmd /c` と PowerShell は使わない" in select
 
 
+def test_createが開く前にJSの危険な書き方を確かめさせる():
+    verify = create_steps()["検証"]
+    words = (
+        "innerHTML",
+        "insertAdjacentHTML",
+        "document.write",
+        "eval(",
+        "new Function",
+    )
+    for word in words:
+        assert f"`{word}`" in verify, word
+
+
 def test_createがfilenameを渡させない():
     verify = create_steps()["検証"]
     assert "`filename` は渡さない" in verify
