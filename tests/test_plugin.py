@@ -272,7 +272,10 @@ def test_createの選択の規則():
     select = steps["選択"]
     assert "AskUserQuestion" in select
     assert "その他" in select
-    assert "作り直す前の案のファイルは、作り直した案を保存する前に削除する" in select
+    assert (
+        "作り直す前の案のファイルは、作り直した案を保存する前に、"
+        "手順 6 で自分が保存した案のパスを、1 つずつ指定して削除する"
+    ) in select
     assert "案のファイルをすべて残し" in select
     assert "削除するコマンド" in select
     assert "毎回行う" in select
@@ -398,7 +401,7 @@ def test_createの細部の規則():
     assert "案ごとの保存先の絶対パス" in steps["検証"]
     assert "本文・数値は変えずに直す" in steps["検証"]
     assert (
-        "選ばれた案だけに、手順 7 の崩れと外部リクエストの確認を行う"
+        "選ばれた案だけに、手順 7 の崩れ・外部リクエスト・DOM 検査の確認を行う"
         in steps["要件との照合"]
     )
 
