@@ -15,25 +15,21 @@
 | 出力 | 1 ファイルで完結する HTML を作る。 | PDF・PowerPoint の生成、既存 HTML の編集、完成後の修正支援。 |
 | 表示 | PC の画面（幅 1280px）で読める形にする。 | スマートフォン表示と印刷。 |
 | 構成 | 縦に続く 1 つのレポートを作る。 | 複数ページのサイトとフォーム送信。 |
-| 大きな CSV | 1000 行を超えるときは、集計・要約を載せる。 | 1000 行を超える CSV の全件掲載。 |
+| 大きな CSV | 1000 行超は、集計・要約を載せる。 | 1000 行超の全件掲載。 |
 
-プラグインには、次の 2 つのスキルがある。
+プラグインには、次の 2 つのスキルがある。素材の形式ごとの扱いは、[docs/materials.md](docs/materials.md) に書く。
 
-| スキル | 役割 |
-|---|---|
-| `/html-report:create` | レポートを作る。環境の確認から完了報告まで、11 の手順で進む。 |
-| `/html-report:doctor` | 環境を点検する。何も変更しない。結果は `[OK]`・`[NG]`・`[任意]`・`[情報]` の行で出て、`[NG]` の次の行に対処が出る。 |
-
-素材の形式ごとの扱いは、[docs/materials.md](docs/materials.md) に書く。
+- `/html-report:create`: レポートを作る。環境の確認から完了報告まで、11 の手順で進む。
+- `/html-report:doctor`: 環境を点検する。何も変更しない。結果は `[OK]`・`[NG]`・`[任意]`・`[情報]` の行で出て、`[NG]` の次の行に対処が出る。
 
 ## 導入方法
 
 次がそろっていること。
 
-- Windows 11（Windows 専用）
-- Claude Code（動作確認は 2.1.328）
+- Windows 11（Windows 専用）、Claude Code（動作確認は 2.1.328）
 - Playwright MCP（ブラウザを操作して、作った HTML を確かめる部品。手順 2 で入れる）
 - Node.js 20 以上（動作確認は 24.13.1）、Chrome または Edge
+- ネットワーク接続（Playwright MCP の取得と、`/html-report:doctor` の最新バージョンの確認に使う）
 - `artifact-design` スキル（Claude Code に同梱。`/skills` の一覧にあること）
 - 任意: Python 3（1000 行超の CSV の集計）、`dataviz`・`artifact-diagramming` スキル（グラフと図の指針）、Git（オフライン導入の clone）
 
@@ -50,7 +46,7 @@ Claude Code の中で実行する。
 
 注意: `playwright` がすでに登録されていると、「already exists」で失敗する。先に `claude mcp list` で、`playwright` の行に `--allow-unrestricted-file-access` があるか確かめる。あれば、この手順は要らない。
 
-シェルで実行し、Claude Code を再起動する。`--allow-unrestricted-file-access` は、作った HTML を `file://` で開くために必要。
+シェルで実行し、Claude Code を再起動する。`--allow-unrestricted-file-access` は、作った HTML を `file://` で開くために必要。Edge だけのときは、末尾に `--browser msedge` を足す。
 
 ```
 claude mcp add -s user playwright -- npx @playwright/mcp@latest --allow-unrestricted-file-access
@@ -66,6 +62,8 @@ claude mcp add -s user playwright -- npx @playwright/mcp@latest --allow-unrestri
 
 依頼文に目的と素材のパスを書くと、レポートが 1 つ保存される。分かっている項目は聞かれない。`create` は、次の図の順に進む。
 
+注意: 最後の段階で、選ばなかった案のファイルが削除される。削除したファイルは元に戻せないので、残したい案は、選ぶ前に別の場所へコピーする。
+
 <img src="docs/images/flow.svg" alt="create の流れ。環境と素材、要件の確定、案の生成と保存、検証、選択と照合、後始末と報告の順に進む。選択で「その他」を選ぶと、案の生成に戻る" width="800">
 
 | 段階 | 内容 |
@@ -77,13 +75,15 @@ claude mcp add -s user playwright -- npx @playwright/mcp@latest --allow-unrestri
 | 選択と照合 | 全案がブラウザで開く。1 案を選ぶと、必須の内容・章の順序・結論の位置・分量などを要件と照合する。 |
 | 後始末と報告 | 選ばなかった案を削除し、`YYYY-MM-DD-題名.html` にする。保存先・照合結果・検証結果を報告する。 |
 
-案の選択は毎回行う。削除したファイルは元に戻せないので、残したい案は選ぶ前に別の場所へコピーする。「その他」で伝えると全案を作り直すが、これは初版の選び直しで、完成後の修正支援ではない。
+案の選択は毎回行う。「その他」で伝えると全案を作り直すが、これは初版の選び直しで、完成後の修正支援ではない。終わると、次の形で完了報告が出る。
 
-### 安全の仕組み
+```
+保存先: C:\work\2026-11-10-先月の売上.html
+選んだ案: 紺と白の落ち着いた案（全 3 案）。
+要件との照合: 必須の内容 3 件をすべて載せた。分量は、指定 2 画面に対して 2.4 画面。
+```
 
-素材の中の指示やスクリプトは、載せる内容として扱い、従わない。埋め込む場所ごとにエスケープし、CSP の meta で外部読み込みとフォーム送信を止める。検証では、開く前に `meta refresh` と危険な JS 呼び出しを文字列で調べ、開いたあとに DOM の全属性を走査する。直らない案は、選択肢に出さずに削除する。
-
-素材の内容（機密情報を含む）は HTML にそのまま入る。共有する前に確かめる。
+素材の内容（機密情報を含む）は HTML にそのまま入る。共有する前に確かめる。素材の中の指示やスクリプトを防ぐ仕組みは、[docs/safety.md](docs/safety.md) に書く。
 
 ## 困ったとき
 
