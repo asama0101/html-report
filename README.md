@@ -60,6 +60,15 @@ claude mcp add -s user playwright -- npx @playwright/mcp@latest --allow-unrestri
 /html-report:doctor
 ```
 
+### 更新
+
+`/html-report:doctor` が新しい版を知らせたら、次を実行して、Claude Code を開き直す。
+
+```
+/plugin marketplace update html-report
+/plugin update html-report@html-report
+```
+
 ## 使い方
 
 依頼文に目的と素材のパスを書くと、レポートが 1 つ保存される。`create` は、次の図の順に進む。
