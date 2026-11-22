@@ -15,7 +15,7 @@ Claude Code 用プラグイン `html-report`（`plugins/html-report/`）。依�
 
 ## 構成
 
-- `plugins/html-report/skills/create/SKILL.md`: レポートを作る手順そのもの。コードはない。
+- `plugins/html-report/skills/create/SKILL.md`: レポートを作る手順そのもの。手順 7 の DOM 検査だけは、`browser_evaluate` に渡す関数 `dom-check.js` にしてある。
 - `plugins/html-report/skills/doctor/SKILL.md`: 環境の点検。Claude が利用可能なツールとスキルを見て判定するので、スクリプトはない（plugin-rules A4 の例外）。
 - `tests/check_html.py`: 作った HTML の検査（外部読み込み・外部への送信など）。`tests/SCENARIOS.md` は手動の受入シナリオ。
 
