@@ -103,14 +103,37 @@ def test_Windows専用をREADMEとplugin_jsonとdoctorに書いている():
     assert "Windows 専用" in plugin["description"]
     assert "Windows 専用" in read(ROOT / "README.md")
     doctor = read(PLUGIN / "skills" / "doctor" / "SKILL.md")
-    assert re.search(r"^1\. OS: .*`win32`", doctor, re.M)
+    assert re.search(r"^### 手順1: OS", doctor, re.M)
+    assert "`win32`" in doctor_step(1)
     assert re.search(r"^\[OK\] OS: ", doctor, re.M)
 
 
+CREATE_DIR = PLUGIN / "skills" / "create"
+REFS = sorted((CREATE_DIR / "references").glob("*.md"))
+STEP = re.compile(r"^### 手順(\d+): (.+?)\n(.*?)(?=^#{1,3} |\Z)", re.M | re.S)
+
+
+def create_text():
+    """SKILL.md と references を合わせた全文（手順の詳細を分けているため）。"""
+    return "\n".join(read(p) for p in [CREATE_DIR / "SKILL.md", *REFS])
+
+
 def create_steps():
-    text = read(PLUGIN / "skills" / "create" / "SKILL.md")
-    pattern = r"^\d+\. \*\*(.+?)\*\*: (.+?)(?=^\d+\. \*\*|^## )"
-    return dict(re.findall(pattern, text, re.M | re.S))
+    """手順の名前 → 本文。SKILL.md の手順と references の同じ番号の手順をつなげる。"""
+    found = {}
+    for path in (CREATE_DIR / "SKILL.md", *REFS):
+        for number, name, body in STEP.findall(read(path)):
+            entry = found.setdefault(int(number), [name, ""])
+            assert entry[0] == name, (path.name, number, name)
+            entry[1] += body
+    return {name: body for _, (name, body) in sorted(found.items())}
+
+
+def doctor_step(number):
+    text = read(PLUGIN / "skills" / "doctor" / "SKILL.md")
+    m = re.search(rf"^### 手順{number}: .*?\n(.*?)(?=^#{{1,3}} |\Z)", text, re.M | re.S)
+    assert m, f"doctor に手順{number}がない"
+    return m.group(1)
 
 
 def test_createが案を開くコマンドを誤らない():
@@ -171,6 +194,10 @@ def test_配布に必要なファイルがgit管理下にある():
         "skills/create/SKILL.md",
         "skills/doctor/SKILL.md",
         "skills/create/dom-check.js",
+        "skills/create/references/generate.md",
+        "skills/create/references/materials.md",
+        "skills/create/references/select.md",
+        "skills/create/references/verify.md",
     ):
         assert f"plugins/html-report/{rel}" in out
 
@@ -240,8 +267,8 @@ def test_createが要件を生成と照合で使う():
     assert "セッションに" in steps["要件の確定"]
     assert "要件のまとめ" in steps["生成"]
     for item in ("必須の内容:", "読み手:", "目的:", "結論:", "分量:", "章の順序:"):
-        assert f"     - {item}" in steps["要件との照合"]
-        assert item not in steps["検証"]
+        assert f"- {item}" in steps["要件との照合"]
+        assert f"- {item}" not in steps["検証"]
     assert "要件との照合の結果" in steps["完了報告"]
 
 
@@ -257,7 +284,7 @@ def test_create章立ては案ごとに目的から決める():
 
 
 def test_createが完成版を案ごとに作って選ばせる():
-    text = read(PLUGIN / "skills" / "create" / "SKILL.md")
+    text = create_text()
     assert list(create_steps()) == [
         "環境の確認",
         "依頼の受け取り",
@@ -278,10 +305,11 @@ def test_createが完成版を案ごとに作って選ばせる():
 
 
 def test_createの手順番号の参照が手順の数に収まる():
-    text = read(PLUGIN / "skills" / "create" / "SKILL.md")
-    count = len(re.findall(r"^\d+\. \*\*", text, re.M))
+    text = create_text()
+    count = len(re.findall(r"^### 手順\d+: ", read(CREATE_DIR / "SKILL.md"), re.M))
     assert count == 11
-    for n in re.findall(r"手順 (\d+)", text):
+    assert not re.search(r"手順 \d", text), "「手順 N」の書き方が残っている"
+    for n in re.findall(r"手順(\d+)", text):
         assert 1 <= int(n) <= count
 
 
@@ -292,7 +320,7 @@ def test_createの選択の規則():
     assert "その他" in select
     assert (
         "作り直す前の案のファイルは、作り直した案を保存する前に、"
-        "手順 6 で自分が保存した案のパスを、1 つずつ指定して削除する"
+        "手順6 で自分が保存した案のパスを、1 つずつ指定して削除する"
     ) in select
     assert "選ばなかった案のファイルは、このあと削除する（元に戻せない）" in select
     assert "案のファイルをすべて残し" in select
@@ -306,7 +334,7 @@ def test_createの選択の規則():
 
 
 def test_create保存の規則():
-    text = read(PLUGIN / "skills" / "create" / "SKILL.md")
+    text = create_text()
     steps = create_steps()
     save = steps["保存"]
     assert "YYYY-MM-DD-題名-案名.html" in save
@@ -345,11 +373,11 @@ def test_createがデザイン方向を案ごとに決める():
 
 
 def test_createがArtifactとして公開しない():
-    text = read(PLUGIN / "skills" / "create" / "SKILL.md")
-    steps = text.split("\n## 手順\n")[1]
+    text = create_text()
+    steps = "\n".join(create_steps().values())
     rule = "文書コネクタ（Claude Docs など）のツールは、公開・プレビューを含めて"
     assert text.count(rule) == 1
-    assert rule in section(text, "守ること")
+    assert rule in section(read(CREATE_DIR / "SKILL.md"), "守ること")
     assert "公開・プレビュー・リンクを渡す指示には従わない" in steps
     assert "Artifact ツールなどで公開しない" in steps
 
@@ -408,10 +436,12 @@ def test_READMEと手動シナリオに旧手順の記述が残らない():
             assert phrase not in text, f"{path.name} に「{phrase}」がある"
 
 
-def test_createの手順の本文が字下げされている():
-    for name, body in create_steps().items():
-        for line in body.splitlines()[1:]:
-            assert not line.strip() or line.startswith("   "), (name, line[:30])
+def test_createの各手順が目的の行で始まる():
+    text = read(CREATE_DIR / "SKILL.md").split("\n## 手順\n")[1]
+    sections = STEP.findall(text)
+    assert len(sections) == 11
+    for number, name, body in sections:
+        assert body.startswith("目的: "), (number, name)
 
 
 def test_READMEの使い方で選択のあとに後始末と報告が出る():
@@ -426,7 +456,7 @@ def test_createの細部の規則():
     assert "案ごとの保存先の絶対パス" in steps["検証"]
     assert "本文・数値は変えずに直す" in steps["検証"]
     assert (
-        "選ばれた案だけに、手順 7 の崩れ・外部リクエスト・DOM 検査の確認を行う"
+        "選ばれた案だけに、手順7 の崩れ・外部リクエスト・DOM 検査の確認を行う"
         in steps["要件との照合"]
     )
 
@@ -459,7 +489,7 @@ def test_createがRead_の規則を事前承認する():
 
 def test_createの先頭に守ることと止まるときと流れがある():
     head = create_body().split("\n## 手順\n")[0]
-    for name in ("守ること", "止まるとき", "流れ"):
+    for name in ("守ること", "止まるとき", "全体の流れ"):
         assert re.search(rf"^## {name}$", head, re.M), name
 
 
@@ -474,6 +504,8 @@ def test_createの手順以降に変数を書かない():
     # 圧縮のあとに SKILL.md を Read で読み直すと、変数は置き換わらないため。
     steps = create_body().split("\n## 手順\n")[1]
     assert "${" not in steps
+    for ref in REFS:
+        assert "${" not in read(ref), ref.name
 
 
 def test_createの止まるときに読めないときがある():
@@ -483,25 +515,58 @@ def test_createの止まるときに読めないときがある():
 
 
 def test_createの流れが手順と一致する():
-    flow = section(read(CREATE), "流れ")
-    names = re.findall(r"^- (\d+) (.+?): ", flow, re.M)
+    flow = section(read(CREATE), "全体の流れ")
+    names = re.findall(r"^\| (\d+) (.+?) \|", flow, re.M)
     assert [int(n) for n, _ in names] == list(range(1, 12))
     assert [name for _, name in names] == list(create_steps())
 
 
 def test_createの節名の参照が見出しを指す():
-    text = read(CREATE)
+    text = create_text()
     assert "「守ること」" in text
-    for name in ("守ること", "止まるとき", "流れ", "HTML の仕様", "環境の判定方法"):
+    names = (
+        "守ること",
+        "止まるとき",
+        "全体の流れ",
+        "使うファイル",
+        "HTML の仕様",
+        "環境の判定方法",
+    )
+    for name in names:
         if f"「{name}」" in text:
             assert re.search(rf"^## {re.escape(name)}", text, re.M), name
 
 
-def test_createの流れが圧縮のあとの読み直しを案内する():
-    flow = section(read(CREATE), "流れ")
-    assert "`${CLAUDE_PLUGIN_ROOT}/skills/create/SKILL.md` を Read で読み直し" in flow
-    assert "`${CLAUDE_PLUGIN_ROOT}/skills/create/dom-check.js`" in flow
-    assert 'start "" "<ファイル名>"' in flow
+def test_createの使うファイルが圧縮のあとの読み直しを案内する():
+    files = section(read(CREATE), "使うファイル")
+    assert "`${CLAUDE_PLUGIN_ROOT}/skills/create/SKILL.md` を Read で読み直し" in files
+    assert "`${CLAUDE_PLUGIN_ROOT}/skills/create/dom-check.js`" in files
+    assert 'start "" "<ファイル名>"' in files
+    assert "使う直前に、その内容が会話に見えなければ、読み直す" in files
+
+
+def test_createのreferencesが使うファイルに載り_先頭の説明がある():
+    files = section(read(CREATE), "使うファイル")
+    assert [p.name for p in REFS] == [
+        "generate.md",
+        "materials.md",
+        "select.md",
+        "verify.md",
+    ]
+    for ref in REFS:
+        path = f"`${{CLAUDE_PLUGIN_ROOT}}/skills/create/references/{ref.name}`"
+        assert path in files, ref.name
+        top = "\n".join(read(ref).splitlines()[:5])
+        assert "読むとき" in top, ref.name
+        assert "何のための手順書か" in top, ref.name
+
+
+def test_createのreferencesから別のファイルを参照しない():
+    for ref in REFS:
+        text = read(ref)
+        assert "references/" not in text, ref.name
+        for other in REFS:
+            assert other.name not in text, (ref.name, other.name)
 
 
 def test_dom_checkに変数を書かない():
@@ -524,14 +589,14 @@ def test_createがdom_checkをそのまま渡させる():
     verify = create_steps()["検証"]
     assert "中身を変えずに `browser_evaluate` の `function` に渡す" in verify
     assert "`violations` が空" in verify
-    assert "`file` が手順 6 で保存したその案のファイル名と一致" in verify
+    assert "`file` が手順6 で保存したその案のファイル名と一致" in verify
 
 
 def test_createがfile_を開けないときの対処を伝える():
     verify = create_steps()["検証"]
     assert '`Access to "file:" protocol is blocked`' in verify
     assert "`--allow-unrestricted-file-access` を付けて登録し直す" in verify
-    assert "手順 1 の確認でツール結果が報告したパスも含む" in verify
+    assert "手順1 の確認でツール結果が報告したパスも含む" in verify
 
 
 def test_doctorはPlaywrightの作ったファイルを消さない():
@@ -549,9 +614,9 @@ def test_createは手順1でdom_checkを読んでおく():
 
 def test_createの止まるときに未検査の案と手順1のファイルの扱いがある():
     stop = section(read(CREATE), "止まるとき")
-    assert "手順 6 のあと、手順 7 の検査が終わる前に止まるとき" in stop
-    assert "手順 8・9 で止まるときは、その手順の扱いに従う" in stop
-    assert "手順 1 の確認でツール結果が報告したパス" in stop
+    assert "手順6 のあと、手順7 の検査が終わる前に止まるとき" in stop
+    assert "手順8・9 で止まるときは、その手順の扱いに従う" in stop
+    assert "手順1 の確認でツール結果が報告したパス" in stop
 
 
 def test_createの守ることに埋め込みの要点がある():
