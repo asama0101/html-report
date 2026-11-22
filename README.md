@@ -48,6 +48,8 @@ Claude Code の中で実行する。
 
 注意: `playwright` がすでに登録されていると、「already exists」で失敗する。先に `claude mcp list` で、`playwright` の行に `--allow-unrestricted-file-access` があるか確かめる。あれば、この手順は要らない。フラグなしで登録済みなら、先に次のコマンドで登録を外してから、下のコマンドを実行する。
 
+> **警告:** `playwright` の登録が消える。下の `claude mcp add` で登録し直せば戻る。ほかの引数を付けていたときは、先に `claude mcp list` の行を控える。
+
 ```
 claude mcp remove -s user playwright
 ```

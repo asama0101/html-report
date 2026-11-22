@@ -549,7 +549,8 @@ def test_createは手順1でdom_checkを読んでおく():
 
 def test_createの止まるときに未検査の案と手順1のファイルの扱いがある():
     stop = section(read(CREATE), "止まるとき")
-    assert "手順 6 のあとで止まるとき" in stop
+    assert "手順 6 のあと、手順 7 の検査が終わる前に止まるとき" in stop
+    assert "手順 8・9 で止まるときは、その手順の扱いに従う" in stop
     assert "手順 1 の確認でツール結果が報告したパス" in stop
 
 
