@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 390" role="img" aria-labelledby="t d">
   <title id="t">要件を聞くときの動作</title>
-  <desc id="d">依頼文と素材から分かる項目は聞かず、分からない項目だけを選択式で聞く。素材に根拠のない必須項目は、内容を伝える、項目を外す、「素材なし」と書いて載せる、の 3 つから選ぶ。そのあと要件のまとめを見せ、「このまま作る」と答えると HTML を作る。「直す」と答えると、まとめを書き直して、もう一度聞く。答えが得られないときは止まる。</desc>
+  <desc id="d">依頼文と素材から分かる項目は聞かず、分からない項目だけを選択式で聞く。素材に根拠のない必須項目は、内容を伝える、項目を外す、「素材なし」と書いて載せる、の 3 つから選ぶ。そのあと要件のまとめを見せ、「このまま作る」と答えると HTML を作る。「直す」と答えると、まとめを書き直して、もう一度聞く。質問ツールが使えない実行では、文章で出して止まる。</desc>
   <style>
     text { font-family: "Yu Gothic UI", "Hiragino Sans", "Noto Sans JP", Meiryo, sans-serif; fill: #1b2430; }
     .m { fill: #4a5565; }
@@ -67,5 +67,5 @@
   <polygon class="ag" points="649,322 655,312 661,322"/>
   <text x="528" y="332" text-anchor="middle" font-size="12" class="m">「直す」と答えると、まとめを書き直す</text>
 
-  <text x="30" y="372" font-size="12" class="m">答えが得られないときは、仮定して進まず、質問を文章で出して止まる。</text>
+  <text x="30" y="372" font-size="12" class="m">質問ツールが使えない実行では、質問と要件のまとめを文章で出して止まる。</text>
 </svg>
