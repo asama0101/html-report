@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 390" role="img" aria-labelledby="t d">
+  <title id="t">要件を聞くときの動作</title>
+  <desc id="d">依頼文と素材から分かる項目は聞かず、分からない項目だけを選択式で聞く。素材に根拠のない必須項目は、内容を伝える、項目を外す、「素材なし」と書いて載せる、の 3 つから選ぶ。そのあと要件のまとめを見せ、「このまま作る」と答えると HTML を作る。「直す」と答えると、まとめを書き直して、もう一度聞く。答えが得られないときは止まる。</desc>
+  <style>
+    text { font-family: "Yu Gothic UI", "Hiragino Sans", "Noto Sans JP", Meiryo, sans-serif; fill: #1b2430; }
+    .m { fill: #4a5565; }
+    .box { fill: #ffffff; stroke: #8a95a6; stroke-width: 1.5; }
+    .band { fill: #eaf1fc; stroke: #1f5fbf; stroke-width: 1.5; }
+    .out { fill: #e4f3ea; stroke: #1d7a4f; stroke-width: 1.5; }
+    .ln { stroke: #1f5fbf; stroke-width: 2; fill: none; }
+    .dash { stroke: #8a95a6; stroke-width: 2; fill: none; stroke-dasharray: 6 4; }
+    .ah { fill: #1f5fbf; }
+    .ag { fill: #8a95a6; }
+  </style>
+  <rect x="1" y="1" width="798" height="388" rx="8" fill="#ffffff" stroke="#d9dee6"/>
+
+  <rect class="box" x="30" y="20" width="230" height="80" rx="6"/>
+  <text x="145" y="46" text-anchor="middle" font-size="15" font-weight="700">分かる項目は聞かない</text>
+  <text x="145" y="68" text-anchor="middle" font-size="12" class="m">依頼文と素材から取る</text>
+  <text x="145" y="86" text-anchor="middle" font-size="12" class="m">目的・読み手・必須の内容・分量</text>
+
+  <path class="ln" d="M262 60 H278"/>
+  <polygon class="ah" points="276,54 286,60 276,66"/>
+
+  <rect class="band" x="285" y="20" width="230" height="80" rx="6"/>
+  <text x="400" y="46" text-anchor="middle" font-size="15" font-weight="700">分からない項目だけ聞く</text>
+  <text x="400" y="68" text-anchor="middle" font-size="12" class="m">選択式で、1 回に最大 4 問</text>
+  <text x="400" y="86" text-anchor="middle" font-size="12" class="m">推測で埋めない</text>
+
+  <path class="ln" d="M517 60 H533"/>
+  <polygon class="ah" points="531,54 541,60 531,66"/>
+
+  <rect class="band" x="540" y="20" width="230" height="80" rx="6"/>
+  <text x="655" y="46" text-anchor="middle" font-size="15" font-weight="700">素材に根拠のない必須項目</text>
+  <text x="655" y="68" text-anchor="middle" font-size="12" class="m">黙って落とさず、</text>
+  <text x="655" y="86" text-anchor="middle" font-size="12" class="m">次の 3 つから選んでもらう</text>
+
+  <path class="ln" d="M655 102 V118"/>
+  <polygon class="ah" points="649,116 655,126 661,116"/>
+
+  <rect class="box" x="540" y="128" width="230" height="86" rx="6"/>
+  <text x="560" y="154" font-size="13">・内容を伝える</text>
+  <text x="560" y="176" font-size="13">・その項目を外す</text>
+  <text x="560" y="198" font-size="13">・「素材なし」と書いて載せる</text>
+
+  <path class="ln" d="M655 216 V242"/>
+  <polygon class="ah" points="649,240 655,250 661,240"/>
+
+  <rect class="band" x="540" y="252" width="230" height="60" rx="6"/>
+  <text x="655" y="278" text-anchor="middle" font-size="15" font-weight="700">要件のまとめを見せる</text>
+  <text x="655" y="298" text-anchor="middle" font-size="12" class="m">結論の 1 文も添える</text>
+
+  <path class="ln" d="M538 282 H522"/>
+  <polygon class="ah" points="524,276 514,282 524,288"/>
+
+  <rect class="band" x="285" y="252" width="230" height="60" rx="6"/>
+  <text x="400" y="278" text-anchor="middle" font-size="15" font-weight="700">「このまま作る」と答える</text>
+  <text x="400" y="298" text-anchor="middle" font-size="12" class="m">それまで HTML は作らない</text>
+
+  <path class="ln" d="M283 282 H267"/>
+  <polygon class="ah" points="269,276 259,282 269,288"/>
+
+  <rect class="out" x="30" y="252" width="230" height="60" rx="6"/>
+  <text x="145" y="288" text-anchor="middle" font-size="15" font-weight="700">HTML を作る</text>
+
+  <path class="dash" d="M400 314 V338 H655 V320"/>
+  <polygon class="ag" points="649,322 655,312 661,322"/>
+  <text x="528" y="332" text-anchor="middle" font-size="12" class="m">「直す」と答えると、まとめを書き直す</text>
+
+  <text x="30" y="372" font-size="12" class="m">答えが得られないときは、仮定して進まず、質問を文章で出して止まる。</text>
+</svg>

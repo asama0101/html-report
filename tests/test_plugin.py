@@ -400,8 +400,8 @@ def test_createの手順の本文が字下げされている():
 
 def test_READMEの使い方で選択のあとに後始末と報告が出る():
     readme = read(ROOT / "README.md")
-    usage = readme.split("## 使い方")[1]
-    assert usage.index("| 選択と照合 |") < usage.index("| 後始末と報告 |")
+    alt = re.search(r'<img src="docs/images/flow.svg" alt="([^"]+)"', readme).group(1)
+    assert alt.index("選択と照合") < alt.index("後始末と報告")
 
 
 def test_createの細部の規則():
