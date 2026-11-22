@@ -368,6 +368,8 @@ def test_環境の判定の要点がcreateとdoctorでそろっている(skill):
         '`Access to "file:" protocol is blocked`',
         "`${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json`",
         "エラーの文をそのまま伝える",
+        "「Playwright MCP が `--allow-unrestricted-file-access` なしで"
+        "登録されている」と伝える",
     ):
         assert phrase in text, f"{skill.parent.name} に「{phrase}」がない"
 
@@ -535,3 +537,34 @@ def test_createがfile_を開けないときの対処を伝える():
 def test_doctorはPlaywrightの作ったファイルを消さない():
     doctor = read(PLUGIN / "skills" / "doctor" / "SKILL.md")
     assert "消さず" in doctor
+
+
+def test_createは手順1でdom_checkを読んでおく():
+    assert "`dom-check.js`" in create_steps()["環境の確認"]
+    verify = create_steps()["検証"]
+    assert "Read の結果の行番号を除き" in verify
+    assert "エラーを返したら、不正と同じ扱いにする" in verify
+    assert "location.href" not in verify
+
+
+def test_createの止まるときに未検査の案と手順1のファイルの扱いがある():
+    stop = section(read(CREATE), "止まるとき")
+    assert "手順 6 のあとで止まるとき" in stop
+    assert "手順 1 の確認でツール結果が報告したパス" in stop
+
+
+def test_createの守ることに埋め込みの要点がある():
+    rules = section(read(CREATE), "守ること")
+    assert "`textContent`" in rules
+    assert "エスケープ" in rules
+
+
+def test_doctorは承認されなかったときNGにしない():
+    doctor = read(PLUGIN / "skills" / "doctor" / "SKILL.md")
+    assert "承認されなかったため確認していません" in doctor
+
+
+def test_READMEがフラグなしの登録の外し方を書く():
+    readme = read(ROOT / "README.md")
+    assert "claude mcp remove -s user playwright" in readme
+    assert "Playwright がファイルを作ることはある" in readme
