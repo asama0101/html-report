@@ -22,7 +22,7 @@
 スキルは 2 つ。素材の形式ごとの扱いは、[docs/materials.md](docs/materials.md) に書く。
 
 - `/html-report:create`: レポートを作る。11 の手順で進む。
-- `/html-report:doctor`: 環境を点検する。何も変更しない。`[NG]` の次の行に対処が出る。
+- `/html-report:doctor`: 環境を点検する。何も変更しない（Playwright がファイルを作ることはある）。`[NG]` の次の行に対処が出る。
 
 ## 導入方法
 
@@ -46,7 +46,13 @@ Claude Code の中で実行する。
 
 ### 2. Playwright MCP を入れる
 
-注意: `playwright` がすでに登録されていると、「already exists」で失敗する。先に `claude mcp list` で、`playwright` の行に `--allow-unrestricted-file-access` があるか確かめる。あれば、この手順は要らない。
+注意: `playwright` がすでに登録されていると、「already exists」で失敗する。先に `claude mcp list` で、`playwright` の行に `--allow-unrestricted-file-access` があるか確かめる。あれば、この手順は要らない。フラグなしで登録済みなら、先に次のコマンドで登録を外してから、下のコマンドを実行する。
+
+> **警告:** `playwright` の登録が消える。下の `claude mcp add` で登録し直せば戻る。ほかの引数を付けていたときは、先に `claude mcp list` の行を控える。
+
+```
+claude mcp remove -s user playwright
+```
 
 シェルで実行し、Claude Code を再起動する。`--allow-unrestricted-file-access` は、作った HTML を `file://` で開くために必要。Edge だけのときは、末尾に `--browser msedge` を足す。
 

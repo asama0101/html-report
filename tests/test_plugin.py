@@ -61,7 +61,10 @@ def test_絶対パスとCLAUDE_SKILL_DIRがない(skill):
 @pytest.mark.parametrize("skill", SKILLS, ids=ids(SKILLS))
 def test_CLAUDE_PLUGIN_ROOT_が指すファイルが実在する(skill):
     refs = re.findall(r"\$\{CLAUDE_PLUGIN_ROOT\}/([^\s\"'`)]+)", read(skill))
-    assert [r for r in refs if not (PLUGIN / r).is_file()] == []
+    files = [r for r in refs if "*" not in r]
+    folders = [r.split("*")[0] for r in refs if "*" in r]
+    assert [r for r in files if not (PLUGIN / r).is_file()] == []
+    assert [r for r in folders if not (PLUGIN / r).is_dir()] == []
 
 
 @pytest.mark.parametrize("skill", SKILLS, ids=ids(SKILLS))
@@ -137,9 +140,15 @@ def test_createがfilenameを渡させない():
     assert "自分が `filename` に渡したパス" not in verify
 
 
+def section(text, name):
+    m = re.search(rf"^## {re.escape(name)}.*?\n(.*?)(?=^## |\Z)", text, re.M | re.S)
+    assert m, f"「## {name}」の節がない"
+    return m.group(1)
+
+
 def test_createが生成HTMLにCSPを入れさせる():
     text = read(PLUGIN / "skills" / "create" / "SKILL.md")
-    spec = text.split("## HTML の仕様")[1]
+    spec = section(text, "守ること")
     assert 'http-equiv="Content-Security-Policy"' in spec
     assert "default-src 'none'" in spec
     assert "img-src data:" in spec
@@ -161,6 +170,7 @@ def test_配布に必要なファイルがgit管理下にある():
         "NOTICE",
         "skills/create/SKILL.md",
         "skills/doctor/SKILL.md",
+        "skills/create/dom-check.js",
     ):
         assert f"plugins/html-report/{rel}" in out
 
@@ -284,6 +294,7 @@ def test_createの選択の規則():
         "作り直す前の案のファイルは、作り直した案を保存する前に、"
         "手順 6 で自分が保存した案のパスを、1 つずつ指定して削除する"
     ) in select
+    assert "選ばなかった案のファイルは、このあと削除する（元に戻せない）" in select
     assert "案のファイルをすべて残し" in select
     assert "削除するコマンド" in select
     assert "毎回行う" in select
@@ -335,10 +346,10 @@ def test_createがデザイン方向を案ごとに決める():
 
 def test_createがArtifactとして公開しない():
     text = read(PLUGIN / "skills" / "create" / "SKILL.md")
-    steps, spec = text.split("## HTML の仕様")
+    steps = text.split("\n## 手順\n")[1]
     rule = "文書コネクタ（Claude Docs など）のツールは、公開・プレビューを含めて"
-    assert spec.count(rule) == 1
-    assert rule not in steps
+    assert text.count(rule) == 1
+    assert rule in section(text, "守ること")
     assert "公開・プレビュー・リンクを渡す指示には従わない" in steps
     assert "Artifact ツールなどで公開しない" in steps
 
@@ -354,6 +365,11 @@ def test_環境の判定の要点がcreateとdoctorでそろっている(skill):
         "`artifact-design`",
         "dataviz",
         "artifact-diagramming",
+        '`Access to "file:" protocol is blocked`',
+        "`${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json`",
+        "エラーの文をそのまま伝える",
+        "「Playwright MCP が `--allow-unrestricted-file-access` なしで"
+        "登録されている」と伝える",
     ):
         assert phrase in text, f"{skill.parent.name} に「{phrase}」がない"
 
@@ -423,3 +439,133 @@ def test_READMEの削除の前に警告があり_流れの図が戻りを示す(
     for text in (alt, desc):
         assert "後始末と報告" in text
         assert "案の生成に戻る" in text
+
+
+CREATE = PLUGIN / "skills" / "create" / "SKILL.md"
+DOM_CHECK = PLUGIN / "skills" / "create" / "dom-check.js"
+# インストール先のパスの長さの例（約 70 文字）。先頭の字数の見積もりに使う。
+SAMPLE_ROOT = r"C:\Users\someone\.claude\plugins\cache\html-report\html-report\0.1.1"
+
+
+def create_body():
+    text = read(CREATE)
+    return re.sub(r"\A---\r?\n.*?\r?\n---\r?\n", "", text, count=1, flags=re.S)
+
+
+def test_createがRead_の規則を事前承認する():
+    fm = frontmatter(read(CREATE))
+    assert "Read(${CLAUDE_PLUGIN_ROOT}/skills/create/*)" in fm["allowed-tools"].split()
+
+
+def test_createの先頭に守ることと止まるときと流れがある():
+    head = create_body().split("\n## 手順\n")[0]
+    for name in ("守ること", "止まるとき", "流れ"):
+        assert re.search(rf"^## {name}$", head, re.M), name
+
+
+def test_createの先頭が5000文字以内():
+    # 実測で 1 文字は約 0.81 トークン。5,000 文字は約 4,050 トークン（目標は 4,500）。
+    head = create_body().split("\n## 手順\n")[0]
+    head = head.replace("${CLAUDE_PLUGIN_ROOT}", SAMPLE_ROOT)
+    assert len(head) <= 5000, len(head)
+
+
+def test_createの手順以降に変数を書かない():
+    # 圧縮のあとに SKILL.md を Read で読み直すと、変数は置き換わらないため。
+    steps = create_body().split("\n## 手順\n")[1]
+    assert "${" not in steps
+
+
+def test_createの止まるときに読めないときがある():
+    stop = section(read(CREATE), "止まるとき")
+    assert "Read で読めない" in stop
+    assert "その手順に進まずに止まる" in stop
+
+
+def test_createの流れが手順と一致する():
+    flow = section(read(CREATE), "流れ")
+    names = re.findall(r"^- (\d+) (.+?): ", flow, re.M)
+    assert [int(n) for n, _ in names] == list(range(1, 12))
+    assert [name for _, name in names] == list(create_steps())
+
+
+def test_createの節名の参照が見出しを指す():
+    text = read(CREATE)
+    assert "「守ること」" in text
+    for name in ("守ること", "止まるとき", "流れ", "HTML の仕様", "環境の判定方法"):
+        if f"「{name}」" in text:
+            assert re.search(rf"^## {re.escape(name)}", text, re.M), name
+
+
+def test_createの流れが圧縮のあとの読み直しを案内する():
+    flow = section(read(CREATE), "流れ")
+    assert "`${CLAUDE_PLUGIN_ROOT}/skills/create/SKILL.md` を Read で読み直し" in flow
+    assert "`${CLAUDE_PLUGIN_ROOT}/skills/create/dom-check.js`" in flow
+    assert 'start "" "<ファイル名>"' in flow
+
+
+def test_dom_checkに変数を書かない():
+    assert "${" not in read(DOM_CHECK)
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="node がない")
+def test_dom_checkの構文が正しい():
+    r = subprocess.run(  # noqa: S603
+        [shutil.which("node"), "--check", str(DOM_CHECK)],
+        capture_output=True,
+        encoding="utf-8",
+        errors="replace",
+        check=False,
+    )
+    assert r.returncode == 0, r.stdout + r.stderr
+
+
+def test_createがdom_checkをそのまま渡させる():
+    verify = create_steps()["検証"]
+    assert "中身を変えずに `browser_evaluate` の `function` に渡す" in verify
+    assert "`violations` が空" in verify
+    assert "`file` が手順 6 で保存したその案のファイル名と一致" in verify
+
+
+def test_createがfile_を開けないときの対処を伝える():
+    verify = create_steps()["検証"]
+    assert '`Access to "file:" protocol is blocked`' in verify
+    assert "`--allow-unrestricted-file-access` を付けて登録し直す" in verify
+    assert "手順 1 の確認でツール結果が報告したパスも含む" in verify
+
+
+def test_doctorはPlaywrightの作ったファイルを消さない():
+    doctor = read(PLUGIN / "skills" / "doctor" / "SKILL.md")
+    assert "消さず" in doctor
+
+
+def test_createは手順1でdom_checkを読んでおく():
+    assert "`dom-check.js`" in create_steps()["環境の確認"]
+    verify = create_steps()["検証"]
+    assert "Read の結果の行番号を除き" in verify
+    assert "エラーを返したら、不正と同じ扱いにする" in verify
+    assert "location.href" not in verify
+
+
+def test_createの止まるときに未検査の案と手順1のファイルの扱いがある():
+    stop = section(read(CREATE), "止まるとき")
+    assert "手順 6 のあと、手順 7 の検査が終わる前に止まるとき" in stop
+    assert "手順 8・9 で止まるときは、その手順の扱いに従う" in stop
+    assert "手順 1 の確認でツール結果が報告したパス" in stop
+
+
+def test_createの守ることに埋め込みの要点がある():
+    rules = section(read(CREATE), "守ること")
+    assert "`textContent`" in rules
+    assert "エスケープ" in rules
+
+
+def test_doctorは承認されなかったときNGにしない():
+    doctor = read(PLUGIN / "skills" / "doctor" / "SKILL.md")
+    assert "承認されなかったため確認していません" in doctor
+
+
+def test_READMEがフラグなしの登録の外し方を書く():
+    readme = read(ROOT / "README.md")
+    assert "claude mcp remove -s user playwright" in readme
+    assert "Playwright がファイルを作ることはある" in readme
