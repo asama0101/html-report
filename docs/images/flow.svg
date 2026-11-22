@@ -15,8 +15,8 @@
   </g>
   <rect x="1" y="240" width="198" height="100" fill="#dcefe9" stroke="#1f6f5c" stroke-width="1.5"/>
   <g font-size="12" fill="#1f6f5c" font-family="Consolas,monospace">
-    <text x="14" y="42">手順 1〜2</text><text x="314" y="42">手順 3</text><text x="614" y="42">手順 4〜6</text>
-    <text x="614" y="262">手順 7</text><text x="314" y="262">手順 8〜9</text><text x="14" y="262">手順 10〜11</text>
+    <text x="14" y="42">手順1〜2</text><text x="314" y="42">手順3</text><text x="614" y="42">手順4〜6</text>
+    <text x="614" y="262">手順7</text><text x="314" y="262">手順8〜9</text><text x="14" y="262">手順10〜11</text>
   </g>
   <g font-size="16" font-weight="700" fill="#1d2321">
     <text x="14" y="68">環境と素材</text><text x="314" y="68">要件の確定</text><text x="614" y="68">案の生成と保存</text>
