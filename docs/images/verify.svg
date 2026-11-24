@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 410" role="img" aria-labelledby="t d">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 444" role="img" aria-labelledby="t d">
   <title id="t">全案の検証と、選んだ案の照合</title>
-  <desc id="d">保存した HTML を、幅 1280px、高さ 720px のブラウザで開く。全案には、崩れがないこと、外部へのリクエストがないこと、危険な属性や要素がないことを確かめる（検証）。選んだ案には、必須の内容、章の順序、読み手、目的、結論の位置、分量の 6 点を要件のまとめと照合する。合わない点は直して確かめ直す。直す回数は、崩れ、安全の検査、照合のそれぞれ最大 3 回。</desc>
+  <desc id="d">保存した HTML を、幅 1280px、高さ 720px のブラウザで開く。全案には、崩れがないこと、外部へのリクエストがないこと、危険な属性や要素がないことを確かめる（検証）。選んだ案には、必須の内容、章の順序、読み手、目的、結論の位置、分量、出典と未確定事項の 7 点を要件のまとめと照合する。合わない点は直して確かめ直す。直す回数は、崩れ、安全の検査、照合のそれぞれ最大 3 回。</desc>
   <style>
     text { font-family: "Yu Gothic UI", "Hiragino Sans", "Noto Sans JP", Meiryo, sans-serif; fill: #1b2430; }
     .m { fill: #4a5565; }
@@ -9,7 +9,7 @@
     .ln { stroke: #1f5fbf; stroke-width: 2; fill: none; }
     .ah { fill: #1f5fbf; }
   </style>
-  <rect x="1" y="1" width="798" height="408" rx="8" fill="#ffffff" stroke="#d9dee6"/>
+  <rect x="1" y="1" width="798" height="442" rx="8" fill="#ffffff" stroke="#d9dee6"/>
 
   <rect x="30" y="24" width="270" height="170" rx="6" fill="#ffffff" stroke="#1b2430" stroke-width="2.5"/>
   <rect x="44" y="40" width="150" height="12" rx="2" fill="#1f5fbf"/>
@@ -36,7 +36,7 @@
     <text x="388" y="132">危険な属性・要素がない（DOM 検査）</text>
   </g>
 
-  <text x="364" y="178" font-size="14" font-weight="700" class="m">選んだ案の照合（要件のまとめと 6 点）</text>
+  <text x="364" y="178" font-size="14" font-weight="700" class="m">選んだ案の照合（要件のまとめと 7 点）</text>
   <g font-size="15">
     <circle class="ck" cx="364" cy="202" r="11"/><path class="tick" d="M358 202 l4 4 l8 -9"/>
     <text x="388" y="208">必須の内容が、すべて章に載っている</text>
@@ -50,6 +50,8 @@
     <text x="388" y="344">結論が、最初の画面にある</text>
     <circle class="ck" cx="364" cy="372" r="11"/><path class="tick" d="M358 372 l4 4 l8 -9"/>
     <text x="388" y="378">分量が、指定の画面数または章の数に合う</text>
+    <circle class="ck" cx="364" cy="406" r="11"/><path class="tick" d="M358 406 l4 4 l8 -9"/>
+    <text x="388" y="412">出典と未確定事項が、あるべき形で載っている</text>
   </g>
 
   <text x="30" y="300" font-size="13" class="m">合わない点は直して確かめ直す。</text>
