@@ -15,6 +15,12 @@ allowed-tools: mcp__playwright__browser_navigate mcp__playwright__browser_resize
 | 案 | 同じ内容で、デザインと章立てを変えて作る HTML の完成版（2〜3 つ） |
 | 要件のまとめ | 手順3 で確認を受ける、目的・読み手・必須の内容・分量・結論 |
 | DOM 検査 | 開いたページに危険な要素・属性がないかを `dom-check.js` で調べること |
+| Playwright MCP | ブラウザを操作するツール群 |
+| ToolSearch | 遅延読み込みのツールを探すツール |
+| AskUserQuestion | 選択肢で質問するツール |
+| `artifact-design` | デザインの指針を持つスキル |
+| `dataviz` | 任意。グラフの指針を持つスキル |
+| `artifact-diagramming` | 任意。図の指針を持つスキル |
 
 ## 環境の判定方法（`/html-report:doctor` と共通）
 この判定は推定である。実行時に使えなかったら、その時点で止める。

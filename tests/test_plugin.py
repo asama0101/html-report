@@ -625,6 +625,11 @@ def test_createの守ることに埋め込みの要点がある():
     assert "エスケープ" in rules
 
 
+def test_generateがJSデータの_lt_を_u003c_に置き換えさせる():
+    generate = read(CREATE_DIR / "references" / "generate.md")
+    assert "`<` を `\\u003c` にする" in generate
+
+
 def test_doctorは承認されなかったときNGにしない():
     doctor = read(PLUGIN / "skills" / "doctor" / "SKILL.md")
     assert "承認されなかったため確認していません" in doctor
