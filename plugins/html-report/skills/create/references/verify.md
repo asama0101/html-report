@@ -18,8 +18,7 @@ Playwright MCP で、保存した全案の HTML を `file://` で開く。URL �
 #### 開く前の確認
 保存した各案のファイルの文字列に対して行う（安全の検査の修正回数に含める）。開いたあとの DOM 検査を補う確認である。
 - meta refresh: 正規表現 `http-equiv\s*=\s*["']?\s*refresh`（大文字小文字を問わない）に合うものがないことを確かめ、あれば取り除く（ページは開かれた時点で移動しうる）。
-- JS の危険な書き方: `innerHTML`・`outerHTML`・`insertAdjacentHTML`・`document.write`・`eval(`・`new Function`・`setAttribute(`・`window.open` がないことを確かめる（DOM 検査は読み込み直後の 1 回なので、あとから JS が足す要素や属性を見られない）。あれば、素材の文字列を渡していないかを確かめ、渡していれば `textContent` に直す。
-- 直らない案は、安全の検査の不正と同じ扱いにする。
+- JS の危険な書き方: `innerHTML`・`outerHTML`・`insertAdjacentHTML`・`document.write`・`eval(`・`new Function`・`setAttribute(`・`window.open` がないことを確かめる（DOM 検査は読み込み直後の 1 回なので、あとから JS が足す要素や属性を見られない）。あれば、素材の文字列を渡していないかを確かめ、渡していれば `textContent` に直す。直らない案は、安全の検査の不正と同じ扱いにする。
 
 #### 開いたあとの確認
 - 見た目: 画面を幅 1280px・高さ 720px にして、ページ全体のスクリーンショットを撮り、崩れ（はみ出し・重なり・文字化け）がないか確かめる。HTML の先頭が `<!DOCTYPE html>` で、`<meta charset>` と CSP の meta があることも見る。グラフは、点・棒が軸の目盛りと合っていること、注記や値のラベルが線・点と重なっていないことも見る。
