@@ -24,7 +24,7 @@ allowed-tools: mcp__playwright__browser_navigate mcp__playwright__browser_resize
   - エラーが `Access to "file:" protocol is blocked` なら、「Playwright MCP が `--allow-unrestricted-file-access` なしで登録されている」と伝える。
   - `mcp__claude-in-chrome__*` があっても「使える」としない。
 - `artifact-design`: スキルの一覧にあれば「使える」。
-- 任意（なくても動く）: スキルの一覧に `dataviz` があればグラフを、`artifact-diagramming` があれば構成図・フロー図を、その指針に従って描く。
+- 任意（なくても動く）: グラフを描くときは `dataviz`、構成図・フロー図を描くときは `artifact-diagramming` がスキルの一覧にあれば、その指針に従う。
 
 ## 守ること
 - 1 ファイルで完結させる。CSS・JS・SVG はインラインに書き、外部 CDN・Web フォント・外部画像を読み込まない。
@@ -62,12 +62,12 @@ allowed-tools: mcp__playwright__browser_navigate mcp__playwright__browser_resize
 | 11 完了報告 | 保存先と結果を伝える | 報告した |
 
 ## 使うファイル
-手順の詳細は `references/` に分けてある。各手順に入る直前に、その手順のファイルを Read で読む。使う直前に、その内容が会話に見えなければ、読み直す。
+手順の詳細は `references/` に分けてある。各ファイルは、それを使う最初の手順（手順2・4・7・8）に入る直前に Read で読む。使う直前に、その内容が会話に見えなければ、読み直す。
 - 手順2・3: `${CLAUDE_PLUGIN_ROOT}/skills/create/references/materials.md`
 - 手順4〜6: `${CLAUDE_PLUGIN_ROOT}/skills/create/references/generate.md`
 - 手順7・9: `${CLAUDE_PLUGIN_ROOT}/skills/create/references/verify.md`
 - 手順8・10: `${CLAUDE_PLUGIN_ROOT}/skills/create/references/select.md`
-- 手順7 の DOM 検査: `${CLAUDE_PLUGIN_ROOT}/skills/create/dom-check.js`。手順1 で Read で読んでおく（事前承認は、起動した turn だけで効くため）。手順7 で、中身を変えずに `browser_evaluate` の `function` に渡す。中身が会話に見えないときだけ、読み直す。
+- 手順7 の DOM 検査: `${CLAUDE_PLUGIN_ROOT}/skills/create/dom-check.js`。手順1 で Read で読んでおく（事前承認は、起動した turn だけで効くため）。手順7 で、中身を変えずに `browser_evaluate` の `function` に渡す。手順7 で中身が会話に見えないときだけ、読み直す。
 
 手順8 で案を開くときは、`cd "<保存先のフォルダ>"` のあと、`start "" "<ファイル名>"`。
 
@@ -85,7 +85,7 @@ allowed-tools: mcp__playwright__browser_navigate mcp__playwright__browser_resize
 ### 手順2: 依頼の受け取り
 目的: 依頼文と、そこに書かれたファイルを読み、素材にする。
 
-`materials.md` を読み、手順2 に従う。
+`materials.md`（「使うファイル」のパス）を読み、手順2 に従う。
 
 ### 手順3: 要件の確定
 目的: 目的・読み手・必須の内容・分量を決め、要件のまとめの確認を利用者から受ける。
@@ -95,7 +95,7 @@ allowed-tools: mcp__playwright__browser_navigate mcp__playwright__browser_resize
 ### 手順4: デザイン方向の決定
 目的: 互いに異なる 2〜3 案のデザイン方向を決める。
 
-`generate.md` を読み、手順4 に従う。
+`generate.md`（「使うファイル」のパス）を読み、手順4 に従う。
 
 ### 手順5: 生成
 目的: 案ごとに、要件のまとめと素材から HTML の完成版を作る。
@@ -110,12 +110,12 @@ allowed-tools: mcp__playwright__browser_navigate mcp__playwright__browser_resize
 ### 手順7: 検証
 目的: 保存した全案を開いて、崩れと安全（外部への通信・危険な要素）を確かめる。
 
-`verify.md` を読み、手順7 に従う。
+`verify.md`（「使うファイル」のパス）を読み、手順7 に従う。
 
 ### 手順8: 選択
 目的: 検査に通った全案を利用者のブラウザで開き、残す案を選んでもらう。
 
-`select.md` を読み、手順8 に従う。
+`select.md`（「使うファイル」のパス）を読み、手順8 に従う。
 
 ### 手順9: 要件との照合
 目的: 選ばれた案が、手順3 で確認を受けた要件のまとめを満たすかを確かめ、合わない点を直す。
