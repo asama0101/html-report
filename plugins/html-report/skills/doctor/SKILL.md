@@ -38,22 +38,23 @@ html-report の動作に必要な環境を点検し、結果を、共通の行�
 ### 手順1: OS の確認
 目的: 対応する OS（Windows）で動いているかを確かめる。
 
-実行環境の Platform が `win32`（Windows）なら `[OK]`、それ以外は `[NG]`。
+Platform が `win32`（Windows）なら `[OK]`、それ以外は `[NG]`。
 
 ### 手順2: Playwright MCP の確認
 目的: ブラウザツールがあり、作った HTML を `file://` で開けるかを確かめる。
 
-- `mcp__playwright__browser_navigate` などのブラウザツールが、利用可能なツールの一覧、または ToolSearch（遅延読み込みのツールを探すツール）で見つかり、`browser_navigate` で `${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json` を `file://` の URL（`\` を `/` にし、各部分をパーセントエンコードする）で開ければ `[OK]`。
-- 開けなければ `[NG]` とし、エラーの文をそのまま伝える（`[NG] Playwright MCP: file:// を開けません（<エラーの文>）`）。エラーが `Access to "file:" protocol is blocked` なら、「Playwright MCP が `--allow-unrestricted-file-access` なしで登録されている」と伝える。それ以外のエラー（ブラウザがない、タイムアウトなど）も `[NG]` とする。
+- `mcp__playwright__browser_navigate` などのブラウザツールが、ツールの一覧か ToolSearch で見つかり、`browser_navigate` で `${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json` を `file://` の URL（`\` を `/` にし、各部分をパーセントエンコードする）で開ければ `[OK]`。
+- 開けなければ、エラーの種類（ブラウザがない、タイムアウトなど）を問わず `[NG]` とし、エラーの文をそのまま伝える（`[NG] Playwright MCP: file:// を開けません（<エラーの文>）`）。
+- エラーが `Access to "file:" protocol is blocked` なら、「Playwright MCP が `--allow-unrestricted-file-access` なしで登録されている」と伝える。
 - `browser_navigate` の承認が得られなかったときは、`[NG]` にせず、`[OK] Playwright MCP: ツールはあります（file:// を開けるかは、承認されなかったため確認していません）` とする。
 - ツールが見つからなければ `[NG]`。
 - ツール結果がファイルのパスを報告したとき（Playwright が出力先にスナップショットなどを書いたとき）は、消さずに、次の行に `  → Playwright が <パス> を作った（不要なら削除してよい）` と書く。
-- `mcp__claude-in-chrome__*` は対象外で、これがあっても `[OK]` としない。
+- `mcp__claude-in-chrome__*` があっても `[OK]` としない。
 
 ### 手順3: `artifact-design` の確認
 目的: デザインの指針のスキルが使えるかを確かめる。
 
-利用可能なスキルの一覧に `artifact-design` があれば `[OK]`、なければ `[NG]`。
+スキルの一覧に `artifact-design` があれば `[OK]`、なければ `[NG]`。
 
 ### 手順4: `dataviz` の確認
 目的: グラフの指針のスキルがあるかを確かめる（なくても動く）。
@@ -92,7 +93,7 @@ html-report の動作に必要な環境を点検し、結果を、共通の行�
   → README の「導入方法」の冒頭を見る
 [任意] dataviz: 未導入（なくても動く）
 [任意] artifact-diagramming: 未導入（なくても動く）
-[情報] プラグインのバージョン: v0.1.1（最新です）
+[情報] プラグインのバージョン: v0.1.2（最新です）
 ```
 
 出力は、項目の行と対処の行だけにする（前置きや結びの文は付けない）。
