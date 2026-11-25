@@ -1,6 +1,6 @@
 {
   "name": "html-report",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "希望した内容で、目的・読み手・必須の内容に沿った 1 ファイル完結の HTML レポートを生成する。Windows 専用。",
   "author": { "name": "html-report contributors" },
   "license": "MIT",
