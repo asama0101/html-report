@@ -35,4 +35,4 @@ Claude Code 用プラグイン `html-report`（`plugins/html-report/`）。依�
 - 版は、`plugins/html-report/.claude-plugin/plugin.json` の `version`、`pyproject.toml` の `version`、`plugins/html-report/skills/doctor/SKILL.md` の表示例（`[情報] プラグインのバージョン: v…`）の 3 か所にある。版を上げるときは、そろえる。
 - SKILL.md の環境の判定方法は、create と doctor で同じ文面にそろえる。
 - 規則は `~/.claude/reference/plugin-rules.md`。SKILL.md や README を直したら、テストを先に流す。
-- `docs/superpowers/`・`docs/spec-grill/` は `.gitignore` の対象（作業メモの置き場）。
+- `docs/superpowers/`・`docs/grill-spec/` は `.gitignore` の対象（作業メモの置き場）。
