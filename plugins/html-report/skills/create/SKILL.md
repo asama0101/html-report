@@ -14,6 +14,7 @@ allowed-tools: mcp__playwright__browser_navigate mcp__playwright__browser_resize
 | 素材 | 依頼文に書かれたファイルと、依頼文・質問への回答の内容 |
 | 案 | 同じ内容で、デザインと章立てを変えて作る HTML の完成版（2〜3 つ） |
 | 要件のまとめ | 手順3 で確認を受ける、目的・読み手・必須の内容・分量・結論 |
+| 記録 | HTML の末尾に入れる、要件のまとめと選んだ案のデザイン方向。作り直しに使う |
 | DOM 検査 | 開いたページに危険な要素・属性がないかを `dom-check.js` で調べること |
 | Playwright MCP | ブラウザを操作するツール群 |
 | ToolSearch | 遅延読み込みのツールを探すツール |
