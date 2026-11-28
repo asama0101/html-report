@@ -687,3 +687,22 @@ def test_createが記録から作るときは1案にする():
 
 def test_createが照合で直した内容を記録に合わせる():
     assert "記録も同じ内容に直す" in create_steps()["要件との照合"]
+
+
+def test_READMEが作り直しの記録と限界を書く():
+    readme = read(ROOT / "README.md")
+    for phrase in (
+        "作り直しの記録",
+        "見た目は完全には一致しない",
+        "要件のまとめが見える",
+        "Claude に直接頼む",
+    ):
+        assert phrase in readme, phrase
+    assert len(readme.splitlines()) <= 140
+
+
+def test_手動シナリオに記録の確認がある():
+    scenarios = read(ROOT / "tests" / "SCENARIOS.md")
+    assert "check_html.py" in scenarios
+    assert "--record" in scenarios
+    assert "作り直し" in scenarios
