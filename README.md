@@ -19,7 +19,7 @@
 | 構成 | 縦に続く 1 つのレポートを作る。 | 複数ページのサイトとフォーム送信。 |
 | 大きな CSV | 1000 行超は、集計・要約を載せる。 | 1000 行超の全件掲載。 |
 
-スキルは 2 つ。素材の形式ごとの扱いは、[docs/materials.md](docs/materials.md) に書く。
+スキルは 2 つ。
 
 - `/html-report:create`: レポートを作る。11 の手順で進む。
 - `/html-report:doctor`: 環境を点検する。何も変更しない（Playwright がファイルを作ることはある）。`[NG]` の次の行に対処が出る。
@@ -99,7 +99,7 @@ claude mcp add -s user playwright -- npx @playwright/mcp@latest --allow-unrestri
 要件との照合: 必須の内容 3 件をすべて載せた。分量は、指定 2 画面に対して 2.4 画面。
 ```
 
-素材の内容（機密情報を含む）は HTML にそのまま入る。共有する前に確かめる。素材の中の指示やスクリプトを防ぐ仕組みは、[docs/safety.md](docs/safety.md) に書く。
+素材の内容（機密情報を含む）は HTML にそのまま入る。共有する前に確かめる。
 
 ## 困ったとき
 
