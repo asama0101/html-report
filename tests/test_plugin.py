@@ -696,6 +696,7 @@ def test_READMEが作り直しの記録と限界を書く():
         "見た目は完全には一致しない",
         "要件のまとめが見える",
         "Claude に直接頼む",
+        "素材をもう一度渡す",
     ):
         assert phrase in readme, phrase
     assert len(readme.splitlines()) <= 140
