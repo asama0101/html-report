@@ -19,7 +19,7 @@
 | 構成 | 縦に続く 1 つのレポートを作る。 | 複数ページのサイトとフォーム送信。 |
 | 大きな CSV | 1000 行超は、集計・要約を載せる。 | 1000 行超の全件掲載。 |
 
-スキルは 2 つ。素材の形式ごとの扱いは、[docs/materials.md](docs/materials.md) に書く。
+スキルは 2 つ。
 
 - `/html-report:create`: レポートを作る。11 の手順で進む。
 - `/html-report:doctor`: 環境を点検する。何も変更しない（Playwright がファイルを作ることはある）。`[NG]` の次の行に対処が出る。
@@ -79,6 +79,8 @@ claude mcp add -s user playwright -- npx @playwright/mcp@latest --allow-unrestri
 
 依頼文に目的と素材のパスを書くと、レポートが 1 つ保存される。`create` は、次の図の順に進む。
 
+素材は、CSV・Markdown・テキスト・画像（PNG・JPG）・XLSX・PPTX・HTML を読める。上にない形式は、読めるか試す。
+
 注意: 最後の段階で、選ばなかった案のファイルが削除される。削除したファイルは元に戻せないので、残したい案は、選ぶ前に別の場所へコピーする。
 
 <img src="docs/images/flow.svg" alt="create の流れ。環境と素材、要件の確定、案の生成と保存、検証、選択と照合、後始末と報告の順に進む。選択で「その他」を選ぶと、案の生成に戻る" width="800">
@@ -99,7 +101,7 @@ claude mcp add -s user playwright -- npx @playwright/mcp@latest --allow-unrestri
 要件との照合: 必須の内容 3 件をすべて載せた。分量は、指定 2 画面に対して 2.4 画面。
 ```
 
-素材の内容（機密情報を含む）は HTML にそのまま入る。共有する前に確かめる。素材の中の指示やスクリプトを防ぐ仕組みは、[docs/safety.md](docs/safety.md) に書く。
+素材の内容（機密情報を含む）は HTML にそのまま入る。共有する前に確かめる。
 
 ## 困ったとき
 
