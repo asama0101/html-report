@@ -653,6 +653,8 @@ def test_createが記録を全案に入れさせる():
         assert phrase in gen, phrase
     for key in ("requirements", "design", "sources", "chapters", "colors"):
         assert f'"{key}"' in gen, key
+    assert '"plugin": "x.y.z"' in gen
+    assert "0.1.4" not in gen
 
 
 def test_createが記録を下書きにして確認を受ける():
@@ -669,6 +671,8 @@ def test_createが記録を下書きにして確認を受ける():
     assert "渡されていないファイル名を伝える" in confirm
     assert "HTML の本文には載せない" in confirm
     assert "HTML のファイルには載せない" not in confirm
+    assert "記録を下書きに使った HTML は、記録の `sources` に書かない" in confirm
+    assert "ほかに素材のファイルがあるときは、出典にも書かない" in confirm
 
 
 def test_createが記録から作るときは1案にする():
@@ -687,6 +691,7 @@ def test_createが記録から作るときは1案にする():
 
 def test_createが照合で直した内容を記録に合わせる():
     assert "記録も同じ内容に直す" in create_steps()["要件との照合"]
+    assert "章の題・並びを直したとき" in create_steps()["要件との照合"]
 
 
 def test_READMEが作り直しの記録と限界を書く():
@@ -704,6 +709,5 @@ def test_READMEが作り直しの記録と限界を書く():
 
 def test_手動シナリオに記録の確認がある():
     scenarios = read(ROOT / "tests" / "SCENARIOS.md")
-    assert "check_html.py" in scenarios
     assert "--record" in scenarios
-    assert "作り直し" in scenarios
+    assert "作り直しを頼む" in scenarios

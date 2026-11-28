@@ -36,7 +36,7 @@
 - 形は次のとおり。`plugin` は、手順1 で開いた `plugin.json` の `version` が会話に見えるときだけ入れる。ほかの項目は省かない。
 
   ```json
-  {"version": 1, "plugin": "0.1.4", "created": "YYYY-MM-DD",
+  {"version": 1, "plugin": "x.y.z", "created": "YYYY-MM-DD",
    "requirements": {"purpose": "", "reader": "", "must": [""], "volume": "", "conclusion": ""},
    "design": {"name": "", "tone": "", "colors": ["#000000"], "fonts": "", "layout": "", "chapters": [""]},
    "sources": [""]}
