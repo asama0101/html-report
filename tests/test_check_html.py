@@ -1,7 +1,11 @@
+import copy
+import json
+
 import pytest
 from check_html import (
     find_missing_required,
     find_problems,
+    find_record_problems,
     find_structure_problems,
     main,
 )
@@ -221,3 +225,90 @@ def test_main_reads_a_path_with_japanese_and_spaces(tmp_path):
     )
     assert main(["check_html.py", str(page), "--require", "売上の推移"]) == 0
     assert main(["check_html.py", str(page), "--require", "件数の推移"]) == 1
+
+
+RECORD = {
+    "version": 1,
+    "created": "2026-11-28",
+    "requirements": {
+        "purpose": "来期の予算を決める",
+        "reader": "経営会議の出席者",
+        "must": ["月別の売上"],
+        "volume": "3 画面",
+        "conclusion": "売上は前年より増えた",
+    },
+    "design": {
+        "name": "紺の会議資料",
+        "tone": "落ち着いた",
+        "colors": ["#1a2b3c", "#fff"],
+        "fonts": "システムのゴシック",
+        "layout": "1 段組み",
+        "chapters": ["結論", "月別の売上"],
+    },
+    "sources": ["sales.csv"],
+}
+
+
+def with_record(record_text: str) -> str:
+    return wrap(
+        '<script type="application/json" id="html-report-record">'
+        f"{record_text}</script>"
+    )
+
+
+def test_valid_record_has_no_problems():
+    assert find_record_problems(with_record(json.dumps(RECORD))) == []
+
+
+def test_missing_record_is_reported():
+    assert find_record_problems(wrap("<p>x</p>")) == ["記録: ない"]
+
+
+def test_two_records_are_reported():
+    html = with_record(json.dumps(RECORD)) + with_record(json.dumps(RECORD))
+    assert find_record_problems(html) == ["記録: 2 つ以上ある"]
+
+
+def test_broken_json_is_reported():
+    assert find_record_problems(with_record("{")) == ["記録: JSON として読めない"]
+
+
+@pytest.mark.parametrize(
+    ("path", "value", "expected"),
+    [
+        (("requirements", "conclusion"), "", "記録: requirements.conclusion がない"),
+        (("requirements", "must"), [], "記録: requirements.must が空"),
+        (("design", "chapters"), [], "記録: design.chapters が空"),
+        (("design", "colors"), ["red"], "記録: design.colors に色コードでない値: red"),
+        (("sources",), ["C:\\data\\sales.csv"], "記録: sources にフォルダを含む値"),
+        (("version",), 2, "記録: version が 1 でない"),
+    ],
+)
+def test_bad_record_field_is_reported(path, value, expected):
+    record = copy.deepcopy(RECORD)
+    target = record
+    for key in path[:-1]:
+        target = target[key]
+    target[path[-1]] = value
+    assert find_record_problems(with_record(json.dumps(record))) == [expected]
+
+
+def test_raw_lt_in_record_is_reported():
+    record = copy.deepcopy(RECORD)
+    record["requirements"]["purpose"] = "a<b"
+    html = with_record(json.dumps(record, ensure_ascii=False))
+    assert find_record_problems(html) == ["記録: < が \\u003c になっていない"]
+
+
+def test_escaped_lt_in_record_is_ok():
+    record = copy.deepcopy(RECORD)
+    record["requirements"]["purpose"] = "</script>"
+    text = json.dumps(record, ensure_ascii=False).replace("<", "\\u003c")
+    assert find_record_problems(with_record(text)) == []
+
+
+def test_main_with_record_flag(tmp_path, capsys):
+    path = tmp_path / "レポート.html"
+    path.write_text(wrap("<p>x</p>"), encoding="utf-8")
+    assert main(["check_html.py", str(path), "--record"]) == 1
+    assert "NG: 記録: ない" in capsys.readouterr().out
