@@ -675,6 +675,11 @@ def test_createが記録から作るときは1案にする():
     steps = create_steps()
     direction = steps["デザイン方向の決定"]
     assert "記録のデザイン方向で 1 案だけ決める" in direction
+    assert (
+        "`design` の文字列を、そのまま `<style>` と `style` 属性に入れない" in direction
+    )
+    skill = read(CREATE_DIR / "SKILL.md")
+    assert skill.count("記録から作るときは 1 ") == 3
     select = steps["選択"]
     assert "記録から 1 案だけ作ったとき" in select
     assert "記録を使わずに、手順4 からやり直す" in select
