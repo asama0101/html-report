@@ -79,6 +79,8 @@ claude mcp add -s user playwright -- npx @playwright/mcp@latest --allow-unrestri
 
 依頼文に目的と素材のパスを書くと、レポートが 1 つ保存される。`create` は、次の図の順に進む。
 
+素材は、CSV・Markdown・テキスト・画像（PNG・JPG）・XLSX・PPTX・HTML を読める。上にない形式は、読めるか試す。
+
 注意: 最後の段階で、選ばなかった案のファイルが削除される。削除したファイルは元に戻せないので、残したい案は、選ぶ前に別の場所へコピーする。
 
 <img src="docs/images/flow.svg" alt="create の流れ。環境と素材、要件の確定、案の生成と保存、検証、選択と照合、後始末と報告の順に進む。選択で「その他」を選ぶと、案の生成に戻る" width="800">
